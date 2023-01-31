@@ -69,9 +69,16 @@ void ClearSav1(void)
 // Offset is the sum of the trainer id bytes
 void SetSaveBlocksPointers(u16 offset)
 {
+    u16 random;
     struct SaveBlock1** sav1_LocalVar = &gSaveBlock1Ptr;
 
-    offset = (offset + Random()) & (SAVEBLOCK_MOVE_RANGE - 4);
+    // patch to not require RNG to be seeded at boot
+    if (gRngStatus == UNINITIALIZED)
+        random = REG_TM1CNT_L;
+    else
+        random = Random();
+
+    offset = (offset + random) & (SAVEBLOCK_MOVE_RANGE - 4);
 
     gSaveBlock2Ptr = (void *)(&gSaveblock2) + offset;
     *sav1_LocalVar = (void *)(&gSaveblock1) + offset;

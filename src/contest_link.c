@@ -7,6 +7,7 @@
 #include "random.h"
 #include "task.h"
 #include "contest_link.h"
+#include "contest_util.h"
 
 static void Task_LinkContest_StartInitFlags(u8);
 static void Task_LinkContest_InitFlags(u8);
@@ -80,6 +81,7 @@ static void Task_LinkContest_InitFlags(u8 taskId)
 
     gContestPlayerMonIndex = GetMultiplayerId();
     gNumLinkContestPlayers = GetLinkPlayerCount();
+    gLinkContestCompatRngValue = Random32();
     gLinkContestFlags = LINK_CONTEST_FLAG_IS_LINK;
     if (gWirelessCommType == 1)
         gLinkContestFlags = LINK_CONTEST_FLAG_IS_LINK | LINK_CONTEST_FLAG_IS_WIRELESS;
@@ -182,7 +184,9 @@ void Task_LinkContest_CommunicateRngRS(u8 taskId)
     case 0:
         if (GetMultiplayerId() == 0)
         {
-            if (IsLinkTaskFinished() && LinkContest_SendBlock(&gRngValue, sizeof(gRngValue)) == TRUE)
+            gLinkContestCompatRngValue = Random32();
+            gContestRngValue = gLinkContestCompatRngValue;
+            if (IsLinkTaskFinished() && LinkContest_SendBlock(&gLinkContestCompatRngValue, sizeof(gLinkContestCompatRngValue)) == TRUE)
                 gTasks[taskId].tState++;
         }
         else
@@ -193,7 +197,7 @@ void Task_LinkContest_CommunicateRngRS(u8 taskId)
     case 1:
         if (LinkContest_GetBlockReceived(0))
         {
-            memcpy(&gRngValue, gBlockRecvBuffer[0], sizeof(gRngValue));
+            memcpy(&gLinkContestCompatRngValue, gBlockRecvBuffer[0], sizeof(gLinkContestCompatRngValue));
             memcpy(&gContestRngValue, gBlockRecvBuffer[0], sizeof(gContestRngValue));
             gTasks[taskId].tState++;
         }

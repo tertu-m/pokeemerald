@@ -5,6 +5,7 @@
 #include "link.h"
 #include "random.h"
 #include "task.h"
+#include "contest_util.h"
 
 /*
     The functions in this file handle preliminary communication
@@ -203,7 +204,10 @@ static void Task_LinkContest_CommunicateRngEm(u8 taskId)
             if (!IsLinkTaskFinished())
                 return;
 
-            if (LinkContest_SendBlock(&gRngValue, sizeof(gRngValue)) == 1)
+            gLinkContestCompatRngValue = Random32();
+            gContestRngValue = gLinkContestCompatRngValue;
+
+            if (LinkContest_SendBlock(&gLinkContestCompatRngValue, sizeof(gLinkContestCompatRngValue)) == 1)
                 gTasks[taskId].data[0]++;
         }
         else
@@ -216,7 +220,7 @@ static void Task_LinkContest_CommunicateRngEm(u8 taskId)
         // Wait to receive RNG data
         if (LinkContest_GetBlockReceived(0))
         {
-            memcpy(&gRngValue, gBlockRecvBuffer[0], sizeof(gRngValue));
+            memcpy(&gLinkContestCompatRngValue, gBlockRecvBuffer[0], sizeof(gLinkContestCompatRngValue));
             memcpy(&gContestRngValue, gBlockRecvBuffer[0], sizeof(gContestRngValue));
             gTasks[taskId].data[0]++;
         }
