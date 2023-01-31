@@ -5,6 +5,7 @@
 #include "contest_ai.h"
 #include "contest_effect.h"
 #include "constants/moves.h"
+#include "contest_util.h"
 
 #define AI_ACTION_DONE (1 << 0)
 
@@ -326,7 +327,7 @@ u8 ContestAI_GetActionToUse(void)
     {
         // Randomly choose a move index. If it's the move
         // with the highest (or tied highest) score, return
-        u8 moveIdx = MOD(Random(), MAX_MON_MOVES);
+        u8 moveIdx = MOD(ContestRandom(), MAX_MON_MOVES);
         u8 score = eContestAI.moveScores[moveIdx];
         int i;
         for (i = 0; i < MAX_MON_MOVES; i++)
@@ -1634,9 +1635,9 @@ static void ContestAICmd_if_not_eq_var(void)
 static void ContestAICmd_if_random_less_than(void)
 {
 #ifndef UBFIX
-    if ((Random() & 0xFF) < eContestAI.vars[gAIScriptPtr[1]])
+    if ((ContestRandom() & 0xFF) < eContestAI.vars[gAIScriptPtr[1]])
 #else
-    if ((Random() & 0xFF) < gAIScriptPtr[1])
+    if ((ContestRandom() & 0xFF) < gAIScriptPtr[1])
 #endif
         gAIScriptPtr = T1_READ_PTR(gAIScriptPtr + 2);
     else
@@ -1646,9 +1647,9 @@ static void ContestAICmd_if_random_less_than(void)
 static void ContestAICmd_if_random_greater_than(void)
 {
 #ifndef UBFIX
-    if (((Random()) & 0xFF) > eContestAI.vars[gAIScriptPtr[1]])
+    if (((ContestRandom()) & 0xFF) > eContestAI.vars[gAIScriptPtr[1]])
 #else
-    if (((Random()) & 0xFF) > gAIScriptPtr[1])
+    if (((ContestRandom()) & 0xFF) > gAIScriptPtr[1])
 #endif
         gAIScriptPtr = T1_READ_PTR(gAIScriptPtr + 2);
     else

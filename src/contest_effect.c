@@ -3,6 +3,7 @@
 #include "constants/moves.h"
 #include "contest.h"
 #include "contest_effect.h"
+#include "contest_util.h"
 
 static void ContestEffect_HighlyAppealing(void);
 static void ContestEffect_UserMoreEasilyStartled(void);
@@ -182,7 +183,7 @@ static void ContestEffect_StartlePrevMons(void)
 // Startles the POKéMON that appealed before the user.
 static void ContestEffect_StartlePrevMon2(void)
 {
-    u8 rval = Random() % 10;
+    u8 rval = ContestRandom() % 10;
     int jam;
 
     if (rval < 2)
@@ -215,7 +216,7 @@ static void ContestEffect_StartlePrevMons2(void)
 
                 eContestAppealResults.jamQueue[0] = i;
                 eContestAppealResults.jamQueue[1] = CONTESTANT_NONE;
-                rval = Random() % 10;
+                rval = ContestRandom() % 10;
 
                 if (rval == 0)
                     jam = 0;
@@ -436,7 +437,7 @@ static void ContestEffect_MakeFollowingMonsNervous(void)
     {
         for (i = 0; contestantIds[i] != CONTESTANT_NONE; i++)
         {
-            if (Random() % 100 < odds[i] + oddsMod[contestantIds[i]])
+            if (ContestRandom() % 100 < odds[i] + oddsMod[contestantIds[i]])
             {
                 if (CanUnnerveContestant(contestantIds[i]))
                 {
@@ -611,7 +612,7 @@ static void ContestEffect_BetterWhenLater(void)
 // The appeal's quality varies depending on its timing.
 static void ContestEffect_QualityDependsOnTiming(void)
 {
-    u8 rval = Random() % 10;
+    u8 rval = ContestRandom() % 10;
     s16 appeal;
 
     if (rval < 3)
@@ -854,7 +855,7 @@ static void ContestEffect_ScrambleNextTurnOrder(void)
 
         for (i = 0; i < CONTESTANT_COUNT; i++)
         {
-            u8 rval = Random() % (CONTESTANT_COUNT - i);
+            u8 rval = ContestRandom() % (CONTESTANT_COUNT - i);
 
             for (j = 0; j < CONTESTANT_COUNT; j++)
             {

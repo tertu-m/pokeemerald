@@ -26,6 +26,8 @@
 #include "constants/rgb.h"
 #include "constants/battle_anim.h"
 
+static EWRAM_DATA u32 introRandomValue;
+
 /*
     The intro is grouped into the following scenes
     Scene 0. Copyright screen
@@ -1063,6 +1065,11 @@ static void SerialCB_CopyrightScreen(void)
     GameCubeMultiBoot_HandleSerialInterrupt(&gMultibootProgramStruct);
 }
 
+static u16 IntroRandom(void) {
+    introRandomValue = ISO_RANDOMIZE2(introRandomValue);
+    return (u16)(introRandomValue >> 16);
+}
+
 static u8 SetUpCopyrightScreen(void)
 {
     switch (gMain.state)
@@ -1163,7 +1170,8 @@ void CB2_InitCopyrightScreenAfterTitleScreen(void)
 static void Task_Scene1_Load(u8 taskId)
 {
     SetVBlankCallback(NULL);
-    sIntroCharacterGender = MOD(Random(), GENDER_COUNT);
+    introRandomValue = GetSeedSecondaryData();
+    sIntroCharacterGender = MOD(IntroRandom(), GENDER_COUNT);
     IntroResetGpuRegs();
     SetGpuReg(REG_OFFSET_BG3VOFS, 0);
     SetGpuReg(REG_OFFSET_BG2VOFS, 80);
@@ -3107,7 +3115,7 @@ static void SpriteCB_PlayerOnBicycle(struct Sprite *sprite)
     else
     {
         // Random wobble on y axis
-        switch (Random() & 3)
+        switch (IntroRandom() & 3)
         {
         case 0:
             sprite->y2 = -1;

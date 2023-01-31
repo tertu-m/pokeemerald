@@ -1295,7 +1295,7 @@ static void Task_ReadyStartLinkContest(u8 taskId)
         GetMultiplayerId();  // unused return value
         DestroyTask(taskId);
         gTasks[eContest.mainTaskId].func = Task_WaitToRaiseCurtainAtStart;
-        gRngValue = gContestRngValue;
+        gLinkContestCompatRngValue = gContestRngValue;
     }
 }
 
@@ -1450,6 +1450,9 @@ static void CB2_ContestMain(void)
 
 static void VBlankCB_Contest(void)
 {
+    if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK)
+        gLinkContestCompatRngValue = ISO_RANDOMIZE1(gLinkContestCompatRngValue);
+
     SetGpuReg(REG_OFFSET_BG0HOFS, gBattle_BG0_X);
     SetGpuReg(REG_OFFSET_BG0VOFS, gBattle_BG0_Y);
     SetGpuReg(REG_OFFSET_BG1HOFS, gBattle_BG1_X);
@@ -1710,7 +1713,7 @@ static void Task_AppealSetup(u8 taskId)
     if (++gTasks[taskId].data[0] > 19)
     {
         eContest.turnNumber = 0;
-        eContest.unusedRng = gRngValue;
+        //eContest.unusedRng = gRngValue;
         if ((gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK) && IsPlayerLinkLeader())
         {
             s32 i;
@@ -2675,7 +2678,9 @@ static void Task_EndAppeals(u8 taskId)
         SetConestLiveUpdateTVData();
         ContestDebugPrintBitStrings();
     }
-    gContestRngValue = gRngValue;
+    // avoid potential UB
+    if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK)
+        gContestRngValue = gLinkContestCompatRngValue;
     StringExpandPlaceholders(gStringVar4, gText_AllOutOfAppealTime);
     Contest_StartTextPrinter(gStringVar4, TRUE);
     gTasks[taskId].data[2] = 0;
@@ -2894,7 +2899,7 @@ void SetContestants(u8 contestType, u8 rank)
     // Choose three random opponents from the list
     for (i = 0; i < CONTESTANT_COUNT - 1; i++)
     {
-        u16 rnd = Random() % opponentsCount;
+        u16 rnd = ContestRandom() % opponentsCount;
         s32 j;
 
         gContestMons[i] = gContestOpponents[opponents[rnd]];
@@ -3574,7 +3579,7 @@ static void DetermineFinalStandings(void)
     for (i = 0; i < CONTESTANT_COUNT; i++)
     {
         s32 j;
-        randomOrdering[i] = Random();
+        randomOrdering[i] = ContestRandom();
         for (j = 0; j < i; j++)
         {
             if (randomOrdering[i] == randomOrdering[j])
@@ -4302,7 +4307,7 @@ void SortContestants(bool8 useRanking)
     for (i = 0; i < CONTESTANT_COUNT; i++)
     {
         s32 j;
-        randomOrdering[i] = Random();
+        randomOrdering[i] = ContestRandom();
 
         // Loop through all the numbers generated so far.
         for (j = 0; j < i; j++)
@@ -4522,7 +4527,7 @@ static void CalculateAppealMoveImpact(u8 contestant)
 
     // Transform and Role Play require a visible target mon
     // so randomly choose a contestant to be the "target"
-    rnd = Random() % (CONTESTANT_COUNT - 1);
+    rnd = ContestRandom() % (CONTESTANT_COUNT - 1);
     for (i = 0; i < CONTESTANT_COUNT; i++)
     {
         // Target can't be the attacker
@@ -5518,7 +5523,7 @@ void ResetContestLinkResults(void)
 bool8 SaveContestWinner(u8 rank)
 {
     s32 i;
-    u8 captionId = Random() % NUM_PAINTING_CAPTIONS;
+    u8 captionId = ContestRandom() % NUM_PAINTING_CAPTIONS;
 
     // Get the index of the winner among the contestants
     for (i = 0; i < CONTESTANT_COUNT - 1; i++)
@@ -5801,7 +5806,7 @@ static void CalculateContestLiveUpdateData(void)
         }
     }
 
-    gContestResources->tv[winner].move = moveCandidates[Random() % numMoveCandidates];
+    gContestResources->tv[winner].move = moveCandidates[ContestRandom() % numMoveCandidates];
 }
 
 static void SetConestLiveUpdateTVData(void)
@@ -5852,7 +5857,7 @@ static void SetConestLiveUpdateTVData(void)
     }
 
     // Randomly choose one of these actions to comment on
-    randAction = Random() % count;
+    randAction = ContestRandom() % count;
     flags = gContestResources->tv[winner].winnerFlags;
     count = 0;
     flagId = 0;
@@ -5900,7 +5905,7 @@ static void SetConestLiveUpdateTVData(void)
             }
         }
     }
-    loser = loserCandidates[Random() % numLoserCandidates];
+    loser = loserCandidates[ContestRandom() % numLoserCandidates];
 
     // Choose the "worst" action to comment on (flag with highest value)
     flagId = CONTESTLIVE_FLAG_NO_APPEALS;
@@ -6118,4 +6123,3 @@ void StripPlayerAndMonNamesForLinkContest(struct ContestPokemon *mon, s32 langua
         name[PLAYER_NAME_LENGTH] = EOS;
     }
 }
-
