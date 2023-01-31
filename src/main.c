@@ -225,12 +225,14 @@ void EnableVCountIntrAtLine150(void)
 }
 
 // FRLG commented this out to remove RTC, however Emerald didn't undo this!
+// Note that the random branch fixes this problem through other means. -tertu
 #ifdef BUGFIX
 static void SeedRngWithRtc(void)
 {
-    u32 seed = RtcGetMinuteCount();
-    seed = (seed >> 16) ^ (seed & 0xFFFF);
-    SeedRng(seed);
+// Commented out to fix compile
+//    u32 seed = RtcGetMinuteCount();
+//    seed = (seed >> 16) ^ (seed & 0xFFFF);
+//    SeedRng(seed);
 }
 #endif
 
