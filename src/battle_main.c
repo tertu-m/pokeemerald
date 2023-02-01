@@ -940,6 +940,7 @@ static void CB2_HandleStartBattle(void)
 {
     u8 playerMultiplayerId;
     u8 enemyMultiplayerId;
+    u32 dummy;
 
     RunTasks();
     AnimateSprites();
@@ -1101,7 +1102,6 @@ static void CB2_HandleStartBattle(void)
         }
         break;
     case 16:
-        u32 dummy;
         dummy = Random32();
         // Both players are using Emerald, send dummy RNG seed
         if (IsLinkTaskFinished())
