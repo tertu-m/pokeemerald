@@ -314,19 +314,13 @@ void SetLocalLinkPlayerId(u8 playerId)
 
 static void InitLocalLinkPlayer(void)
 {
-    u16 reportVersion;
     gLocalLinkPlayer.trainerId = gSaveBlock2Ptr->playerTrainerId[0] | (gSaveBlock2Ptr->playerTrainerId[1] << 8) | (gSaveBlock2Ptr->playerTrainerId[2] << 16) | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
     StringCopy(gLocalLinkPlayer.name, gSaveBlock2Ptr->playerName);
     gLocalLinkPlayer.gender = gSaveBlock2Ptr->playerGender;
     gLocalLinkPlayer.linkType = gLinkType;
     gLocalLinkPlayer.language = gGameLanguage;
 
-    // Battle link type
-    if ((gLinkType >> 8) == 0x22)
-        reportVersion = RandomBool() ? VERSION_RUBY : VERSION_SAPPHIRE;
-    else
-        reportVersion = VERSION_EMERALD;
-    gLocalLinkPlayer.version = reportVersion + 0x4000;
+    gLocalLinkPlayer.version = gGameVersion + 0x4000;
 
     gLocalLinkPlayer.lp_field_2 = 0x8000;
     gLocalLinkPlayer.progressFlags = IsNationalPokedexEnabled();
