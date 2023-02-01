@@ -1809,7 +1809,7 @@ static void CB2_HandleStartMultiBattle(void)
         {
             u32 *ptr = gBattleStruct->multiBuffer.battleVideo;
             ptr[0] = gBattleTypeFlags;
-            ptr[1] = Random32();; // UB: overwrites berry data
+            ptr[1] = Random32(); // UB: overwrites berry data
             SendBlock(BitmaskAllOtherLinkPlayers(), ptr, sizeof(gBattleStruct->multiBuffer.battleVideo));
             gBattleCommunication[MULTIUSE_STATE]++;
         }
@@ -1817,8 +1817,9 @@ static void CB2_HandleStartMultiBattle(void)
     case 9:
         if ((GetBlockReceivedStatus() & 0xF) == 0xF)
         {
-            /*
+
             ResetBlockReceivedFlags();
+            /*
             for (var = 0; var < 4; var++)
             {
                 u32 blockValue = gBlockRecvBuffer[var][0];
