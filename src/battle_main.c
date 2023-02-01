@@ -1369,16 +1369,16 @@ static void CB2_HandleStartMultiPartnerBattle(void)
         RecordedBattle_SetTrainerInfo();
         gBattleCommunication[SPRITES_INIT_STATE1] = 0;
         gBattleCommunication[SPRITES_INIT_STATE2] = 0;
-        //if (gBattleTypeFlags & BATTLE_TYPE_LINK)
-        //    gBattleCommunication[MULTIUSE_STATE] = 14;
-        //else
+        if (gBattleTypeFlags & BATTLE_TYPE_LINK)
+            gBattleCommunication[MULTIUSE_STATE] = 14;
+        else
             gBattleCommunication[MULTIUSE_STATE] = 16;
         break;
     case 14:
         // Send rng seed for recorded battle
         if (IsLinkTaskFinished())
         {
-            //SendBlock(BitmaskAllOtherLinkPlayers(), &gRecordedBattleRngSeed, sizeof(gRecordedBattleRngSeed));
+            SendBlock(BitmaskAllOtherLinkPlayers(), &gRecordedBattleRngState, sizeof(gRecordedBattleRngState));
             gBattleCommunication[MULTIUSE_STATE]++;
         }
         break;
@@ -1387,8 +1387,8 @@ static void CB2_HandleStartMultiPartnerBattle(void)
         if ((GetBlockReceivedStatus() & 3) == 3)
         {
             ResetBlockReceivedFlags();
-            //if (!(gBattleTypeFlags & BATTLE_TYPE_IS_MASTER))
-                //memcpy(&gRecordedBattleRngSeed, gBlockRecvBuffer[partnerMultiplayerId], sizeof(gRecordedBattleRngSeed));
+            if (!(gBattleTypeFlags & BATTLE_TYPE_IS_MASTER))
+                memcpy(&gRecordedBattleRngState, gBlockRecvBuffer[partnerMultiplayerId], sizeof(gRecordedBattleRngState));
             gBattleCommunication[MULTIUSE_STATE]++;
         }
         break;
