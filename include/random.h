@@ -49,6 +49,7 @@ RANDOM_NONCONST void _UnlockRandom()
 #define Random2Bits(x) ((u16)(Random2_32() >> (32-(x))))
 // The same but arguments between 1 and 32 are valid.
 #define RandomBits32(x) (Random32() >> (32-(x)))
+#define Random2Bits32(x) (Random32() >> (32-(x)))
 
 //Returns a 16-bit pseudorandom number
 RANDOM_NONCONST u16 Random(void) {
@@ -104,6 +105,14 @@ RANDOM_NONCONST u16 RandomModTarget(const u16 modulo, const u16 target)
     return result;
 }
 
+RANDOM_NONCONST u32 RandomModTarget32(const u32 modulo, const u32 target)
+{
+    u32 result;
+    _LockRandom();
+    result = _GetRngModTarget32(&gRngState, modulo, target);
+    _UnlockRandom();
+    return result;
+}
 
 // Taken from Linux. Devised by Martin Uecker.
 #define __is_constexpr(x) \
