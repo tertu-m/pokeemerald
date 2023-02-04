@@ -177,6 +177,7 @@ static void FeebasSeedRng(u16 seed)
 // LAND_WILD_COUNT
 static u8 ChooseWildMonIndex_Land(void)
 {
+    SeedRngIfNeeded();
     u8 rand = Random() % ENCOUNTER_CHANCE_LAND_MONS_TOTAL;
 
     if (rand < ENCOUNTER_CHANCE_LAND_MONS_SLOT_0)
@@ -208,6 +209,8 @@ static u8 ChooseWildMonIndex_Land(void)
 // ROCK_WILD_COUNT / WATER_WILD_COUNT
 static u8 ChooseWildMonIndex_WaterRock(void)
 {
+    // not likely but will happen sometimes.
+    SeedRngIfNeeded();
     u8 rand = Random() % ENCOUNTER_CHANCE_WATER_MONS_TOTAL;
 
     if (rand < ENCOUNTER_CHANCE_WATER_MONS_SLOT_0)

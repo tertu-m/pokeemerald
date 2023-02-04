@@ -14,19 +14,19 @@ This provides additional documentation for those wishing to make more involved c
 * `u16 RandomBits(x)/Random2Bits(x)`: Returns a random value of `x` bits, where `x` is 1-16.
 * `u32 RandomBits32(x)/Random2Bits32(x)`: Returns a random value of `x` bits, where `x` is 1-32.
 * `u16 RandomRangeFast(x)/Random2RangeFast(x)`: Returns a random number from 0 to `x`-1.
-    * This uses a very fast method of generating random numbers in a range that will return biased results if `x` is not a power of 2 that will only ever call `Random32()` once.
+    * This uses a very fast method of generating random numbers in a range that will return biased results if `x` is not a power of 2.
 * `u16 RandomRangeGood(x)/Random2RangeGood(x)`: Returns a random number from 0 to `x`-1.
-    * This removes bias from results by calling `Random32()` multiple times in some circumstances, making it slower than `RandomRangeFast()`.
+    * This removes bias from its results by calling `Random32()` multiple times in some circumstances, making it slower than `RandomRangeFast()`.
 * `u16 RandomModTarget(modulo, target)/u32 RandomModTarget32(modulo, target)`: Returns a random number `x` between 0 and UINT16_MAX or UINT32_MAX (depending on the variant) that satisfies the equation `x % modulo == target`.
 * `void SeedRng1(void)/void SeedRng2(void)`: Reseeds `gRngState` or `gRngState2`. You should not need to call this function yourself.
-* `void StartSeedTimer(void)`: Sets up Timer 1 and Timer 2 for use in RNG seeding. You must call this function before any seed functions are called. You should not need to call this function yourself.
-    * This is called in `AgbMain()` by default.
+* `void StartSeedTimer(void)`: Sets up Timer 1 and Timer 2 for use in RNG seeding. You should not need to call this function yourself.
+    * This is called in `AgbMain()` by default and must be called before any `SeedRng` functions are called.
 
 ## Removed or disabled functions
 * `void SeedRngWithRtc(void)`: The `SeedRng` functions handle RNG seeding, including the RTC where appropriate.
 * `void StartTimer1(void)`: Reworked into `StartSeedTimer()`.
 * `void SeedRng(u32 x)/SeedRng2(u32 x)`: A 32-bit seed is no longer enough to seed SFC32.
-    * Additionally, most of the vanilla uses these functions were not strictly necessary. It is simple to build a private RNG state using `ISO_RANDOMIZE*`, and this was done in this patch.
+    * Additionally, most of the vanilla uses of these functions were not strictly necessary. It is simple to build a private RNG state using `ISO_RANDOMIZE*` for these cases, and this was done in this patch.
 
 ## New advanced/internal functions and macros
 These functions are more specialized or require extra care to use.<br>

@@ -58,17 +58,27 @@ u32 GetSeedSecondaryData()
 static const u32 RANDOM_PADDING = 0xBA5EBA11u;
 static const u32 RANDOM_2_PADDING = 0x5CAFF01Du;
 
-#define READ_TIMERS (((u32)REG_TM2CNT_L << 16) | REG_TM1CNT_L)
+static u32 ReadTimers(void)
+{
+    u32 result;
+
+    REG_TM1CNT_H = 0;
+    result = ((u32)REG_TM2CNT_L << 16) | REG_TM1CNT_L;
+    REG_TM1CNT_H = 0x80;
+    return result;
+}
+
+
 void SeedRng1(void)
 {
     gRngStatus = UNINITIALIZED;
-    SeedRngState(&gRngState, READ_TIMERS, GetSeedSecondaryData(), RANDOM_PADDING);
+    SeedRngState(&gRngState, ReadTimers(), GetSeedSecondaryData(), RANDOM_PADDING);
     gRngStatus = IDLE;
 }
 
 void SeedRng2(void)
 {
-    SeedRngState(&gRng2State, READ_TIMERS, GetSeedSecondaryData(), RANDOM_2_PADDING);
+    SeedRngState(&gRng2State, ReadTimers(), GetSeedSecondaryData(), RANDOM_2_PADDING);
 }
 #undef READ_TIMERS
 
