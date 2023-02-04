@@ -208,9 +208,7 @@ void SetMainCallback2(MainCallback callback)
 
 void SeedRngAndSetTrainerId(void)
 {
-    //u16 val = REG_TM1CNT_L;
-    //SeedRng(val);
-    //REG_TM1CNT_H = 0;
+    SeedRngIfNeeded();
     sTrainerId = Random();
 }
 

@@ -31,6 +31,7 @@ void ResetLotteryCorner(void)
 
 void SetRandomLotteryNumber(u16 i)
 {
+    SeedRngIfNeeded();
     u32 var = Random();
 
     while (--i != 0xFFFF)

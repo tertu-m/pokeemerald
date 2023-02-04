@@ -95,6 +95,11 @@ void SeedRng2(void);
 void StartSeedTimer(void);
 u32 GetSeedSecondaryData(void);
 
+RANDOM_NONCONST void SeedRngIfNeeded(void) {
+    if (gRngStatus == UNINITIALIZED)
+        BootSeedRng();
+}
+
 
 RANDOM_NONCONST u16 RandomModTarget(const u16 modulo, const u16 target)
 {

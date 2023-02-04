@@ -87,6 +87,7 @@ void CB2_InitMysteryEventMenu(void)
     SetVBlankCallback(VBlankCB);
     ResetBgsAndClearDma3BusyFlags(0);
     InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));
+    SeedRngIfNeeded();
     if (InitWindows(sWindowTemplates))
     {
         s32 i;
