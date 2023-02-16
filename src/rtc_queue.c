@@ -137,7 +137,7 @@ static u8 RemoveFirstEntry(struct RtcTriggerEntry heap[], u8 *size)
     else
     {
         tempSize--;
-        SwapEntries(&heap[0], &heap[tempSize]);
+        heap[0] = heap[tempSize];
         HeapSiftDown(heap, tempSize, 0);
     }
     *size = tempSize;
