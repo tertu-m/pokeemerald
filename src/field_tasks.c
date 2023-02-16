@@ -20,6 +20,7 @@
 #include "constants/items.h"
 #include "constants/songs.h"
 #include "constants/metatile_labels.h"
+#include "rtc_queue.h"
 
 /*  This file handles some persistent tasks that run in the overworld.
  *  - Task_RunTimeBasedEvents: Periodically updates local time and RTC events. Also triggers ambient cries.
@@ -188,6 +189,9 @@ void SetUpFieldTasks(void)
 
     if (!FuncIsActiveTask(Task_RunTimeBasedEvents))
         CreateTask(Task_RunTimeBasedEvents, 80);
+
+    if (!FuncIsActiveTask(Task_HandleRtcTriggers))
+        CreateTask(Task_HandleRtcTriggers, 80);
 }
 
 void ActivatePerStepCallback(u8 callbackId)
