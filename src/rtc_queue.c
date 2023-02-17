@@ -37,18 +37,19 @@ static u32 GetRtcSeconds()
     u32 days;
     RtcGetDateTime(&rtc);
     days = RtcGetDayCount(&rtc);
-    return ((days * 24 + rtc.hour) * 60 + rtc.minute) * 60 + rtc.second;
+    return ((days * 24u + rtc.hour) * 60u + rtc.minute) * 60u + rtc.second;
 }
 
 // Returns how many children this entry has.
 static u8 HeapGetChildIndices(u8 size, u8 index, u8 *child1, u8 *child2)
 {
-    if (size == 0 || size < index * 2)
+    const u8 minChildIndex = index * 2  + 1;
+    if (size == 0 || size < minChildIndex + 1)
         return 0;
-    *child1 = index * 2 + 1;
-    *child2 = index * 2 + 2;
+    *child1 = minChildIndex;
+    *child2 = minChildIndex + 1;
 
-    if (size == index * 2)
+    if (size == minChildIndex + 1)
         return 1;
     else
         return 2;
@@ -152,7 +153,7 @@ static u8 AddEntry(struct RtcTriggerEntry heap[], u8 *size, struct RtcTriggerEnt
     tempSize = *size;
     heap[tempSize] = *entry;
     HeapSiftUp(heap, tempSize);
-    tempSize++;
+    tempSize += 1;
     *size = tempSize;
     return tempSize;
 }
