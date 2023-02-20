@@ -72,7 +72,7 @@ SINGLE_BATTLE_TEST("Burn reduces attack by 50%", s16 damage)
 
 SINGLE_BATTLE_TEST("Freeze has a 20% chance of being thawed")
 {
-    PASSES_RANDOMLY(20, 100);
+    PASSES_RANDOMLY(20, 100, WRNG_FROZEN);
     GIVEN {
         PLAYER(SPECIES_WOBBUFFET) { Status1(STATUS1_FREEZE); }
         OPPONENT(SPECIES_WOBBUFFET);
@@ -145,7 +145,7 @@ SINGLE_BATTLE_TEST("Paralysis reduces speed by 50%")
 
 SINGLE_BATTLE_TEST("Paralysis has a 25% chance of skipping the turn")
 {
-    PASSES_RANDOMLY(25, 100);
+    PASSES_RANDOMLY(25, 100, WRNG_PARALYSIS);
     GIVEN {
         PLAYER(SPECIES_WOBBUFFET) { Status1(STATUS1_PARALYSIS); }
         OPPONENT(SPECIES_WOBBUFFET);
