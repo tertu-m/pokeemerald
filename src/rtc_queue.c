@@ -37,7 +37,10 @@ static u32 GetRtcSeconds()
     u32 days;
     RtcGetDateTime(&rtc);
     days = RtcGetDayCount(&rtc);
-    return ((days * 24u + rtc.hour) * 60u + rtc.minute) * 60u + rtc.second;
+    return (
+        (days * 24u + ConvertBcdToBinary(rtc.hour))
+        * 60u + ConvertBcdToBinary(rtc.minute))
+        * 60u + ConvertBcdToBinary(rtc.second);
 }
 
 // Returns how many children this entry has.
