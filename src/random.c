@@ -45,9 +45,9 @@ u32 GetSeedSecondaryData()
     // This will always fit in a u32.
     RtcGetInfo(&rtc);
     seconds = (u32)RtcGetDayCount(&rtc) * 86400u;
-    seconds += rtc.hour * 3600u;
-    seconds += rtc.minute * 60u;
-    seconds += rtc.second;
+    seconds += ConvertBcdToBinary(rtc.hour) * 3600u;
+    seconds += ConvertBcdToBinary(rtc.minute) * 60u;
+    seconds += ConvertBcdToBinary(rtc.second);
 
     return seconds;
 
