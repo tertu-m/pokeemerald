@@ -220,6 +220,8 @@ static void CreateBattlerSprite(u8 battler)
         {
             if (GetMonData(&gEnemyParty[gBattlerPartyIndexes[battler]], MON_DATA_HP) == 0)
                 return;
+            if (gBattleScripting.monCaught) // Don't create opponent sprite if it has been caught.
+                return;
 
             SetMultiuseSpriteTemplateToPokemon(GetMonData(&gEnemyParty[gBattlerPartyIndexes[battler]], MON_DATA_SPECIES), GetBattlerPosition(battler));
             gBattlerSpriteIds[battler] = CreateSprite(&gMultiuseSpriteTemplate, GetBattlerSpriteCoord(battler, BATTLER_COORD_X_2), posY, GetBattlerSpriteSubpriority(battler));
@@ -255,6 +257,8 @@ static void CreateBattlerSprite(u8 battler)
         else
         {
             if (GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_HP) == 0)
+                return;
+            if (GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_IS_EGG))
                 return;
 
             SetMultiuseSpriteTemplateToPokemon(GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_SPECIES), GetBattlerPosition(battler));
@@ -309,7 +313,7 @@ static void CreateHealthboxSprite(u8 battler)
         }
         else if (!(gBattleTypeFlags & BATTLE_TYPE_SAFARI))
         {
-            if (GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_HP) == 0)
+            if (GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_HP) == 0 || GetMonData(&gPlayerParty[gBattlerPartyIndexes[battler]], MON_DATA_IS_EGG))
                 SetHealthboxSpriteInvisible(healthboxSpriteId);
         }
     }
