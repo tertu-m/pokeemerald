@@ -290,10 +290,11 @@ static void BattleTest_Run(void *data)
     PrintTestName();
 }
 
-u32 RandomUniform(enum RandomTag tag, u32 n)
+u32 RandomUniform(enum RandomTag tag, u32 lo, u32 hi)
 {
     if (tag == STATE->rngTag)
     {
+        u32 n = hi - lo + 1;
         if (STATE->trials == 1)
         {
             STATE->trials = n;
@@ -304,10 +305,10 @@ u32 RandomUniform(enum RandomTag tag, u32 n)
             Test_ExitWithResult(TEST_RESULT_ERROR, "RandomUniform called with inconsistent trials %d and %d", STATE->trials, n);
         }
         STATE->trialRatio = Q_4_12(1) / n;
-        return STATE->runTrial;
+        return STATE->runTrial + lo;
     }
 
-    return n-1;
+    return hi;
 }
 
 u32 RandomWeightedArray(enum RandomTag tag, u32 n, const u8 *weights)

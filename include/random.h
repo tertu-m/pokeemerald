@@ -31,7 +31,7 @@ void SeedRng2(u16 seed);
  * for RandomUniform start with URNG and tags for RandomWeighted start
  * with WRNG.
  *
- * RandomUniform(tag, n) returns a number from 0 to n-1 inclusive.
+ * RandomUniform(tag, lo, hi) returns a number from lo to hi inclusive.
  *
  * RandomWeighted(tag, w0, w1, ... wN) returns a number from 0 to N
  * inclusive. The return value is proportional to the weights, e.g.
@@ -46,6 +46,8 @@ enum RandomTag
     URNG_DAMAGE_MODIFIER,
 
     URNG_FORCE_RANDOM_SWITCH,
+    URNG_RAMPAGE_TURNS,
+    URNG_SLEEP_TURNS,
 
     // Weighted tags.
     WRNG_ACCURACY,
@@ -56,8 +58,6 @@ enum RandomTag
     WRNG_PARALYSIS,
     WRNG_SECONDARY_EFFECT,
     WRNG_SPEED_TIE,
-
-    WRNG_RAMPAGE_TURNS,
 
     WRNG_HOLD_EFFECT_FLINCH,
 
@@ -74,10 +74,10 @@ enum RandomTag
         RandomWeightedArray(tag, ARRAY_COUNT(weights), weights); \
     })
 
-u32 RandomUniform(enum RandomTag, u32 n);
+u32 RandomUniform(enum RandomTag, u32 lo, u32 hi);
 u32 RandomWeightedArray(enum RandomTag, u32 n, const u8 *weights);
 
-u32 RandomUniformDefault(enum RandomTag, u32 n);
+u32 RandomUniformDefault(enum RandomTag, u32 lo, u32 hi);
 u32 RandomWeightedArrayDefault(enum RandomTag, u32 n, const u8 *weights);
 
 #endif // GUARD_RANDOM_H

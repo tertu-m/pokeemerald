@@ -33,14 +33,14 @@ u16 Random2(void)
 }
 
 __attribute__((weak, alias("RandomUniformDefault")))
-u32 RandomUniform(enum RandomTag tag, u32 n);
+u32 RandomUniform(enum RandomTag tag, u32 lo, u32 hi);
 
 __attribute__((weak, alias("RandomWeightedArrayDefault")))
 u32 RandomWeightedArray(enum RandomTag tag, u32 n, const u8 *weights);
 
-u32 RandomUniformDefault(enum RandomTag tag, u32 n)
+u32 RandomUniformDefault(enum RandomTag tag, u32 lo, u32 hi)
 {
-    return (n * Random()) >> 16;
+    return lo + (((hi - lo) * Random()) >> 16);
 }
 
 u32 RandomWeightedArrayDefault(enum RandomTag tag, u32 n, const u8 *weights)

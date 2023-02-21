@@ -96,6 +96,21 @@ SINGLE_BATTLE_TEST("Critical hits occur at a 1/24 rate")
     }
 }
 
+SINGLE_BATTLE_TEST("Slash's critical hits occur at a 1/8 rate")
+{
+    ASSUME(B_CRIT_CHANCE >= GEN_7);
+    ASSUME(gBattleMoves[MOVE_SLASH].flags & FLAG_HIGH_CRIT);
+    PASSES_RANDOMLY(1, 8, WRNG_CRITICAL_HIT);
+    GIVEN {
+        PLAYER(SPECIES_WOBBUFFET);
+        OPPONENT(SPECIES_WOBBUFFET);
+    } WHEN {
+        TURN { MOVE(player, MOVE_SLASH); }
+    } SCENE {
+        MESSAGE("A critical hit!");
+    }
+}
+
 SINGLE_BATTLE_TEST("Critical hits deal 50% more damage", s16 damage)
 {
     bool32 criticalHit;

@@ -9740,7 +9740,7 @@ static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType,
     // Add a random factor.
     if (randomFactor)
     {
-        dmg *= 100 - RandomUniform(URNG_DAMAGE_MODIFIER, 16);
+        dmg *= 100 - RandomUniform(URNG_DAMAGE_MODIFIER, 0, 15);
         dmg /= 100;
     }
 

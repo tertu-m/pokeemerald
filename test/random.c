@@ -2,17 +2,17 @@
 #include "test.h"
 #include "random.h"
 
-TEST("RandomUniform generates 0..n-1")
+TEST("RandomUniform generates lo..hi")
 {
-    u32 n, i;
-    PARAMETRIZE { n = 1; }
-    PARAMETRIZE { n = 2; }
-    PARAMETRIZE { n = 3; }
-    PARAMETRIZE { n = 4; }
+    u32 lo, hi, i;
+    PARAMETRIZE { lo = 0; hi = 1; }
+    PARAMETRIZE { lo = 0; hi = 2; }
+    PARAMETRIZE { lo = 0; hi = 3; }
+    PARAMETRIZE { lo = 2; hi = 4; }
     for (i = 0; i < 1024; i++)
     {
-        u32 r = RandomUniformDefault(RNG_NONE, n);
-        EXPECT(0 <= r && r < n);
+        u32 r = RandomUniformDefault(RNG_NONE, lo, hi);
+        EXPECT(lo <= r && r <= hi);
     }
 }
 
@@ -40,7 +40,7 @@ TEST("RandomUniform generates uniform distribution")
     memset(distribution, 0, sizeof(distribution));
     for (i = 0; i < 4096; i++)
     {
-        u32 r = RandomUniformDefault(RNG_NONE, ARRAY_COUNT(distribution));
+        u32 r = RandomUniformDefault(RNG_NONE, 0, ARRAY_COUNT(distribution));
         EXPECT(0 <= r && r < ARRAY_COUNT(distribution));
         distribution[r]++;
     }
