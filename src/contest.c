@@ -2899,7 +2899,7 @@ void SetContestants(u8 contestType, u8 rank)
     // Choose three random opponents from the list
     for (i = 0; i < CONTESTANT_COUNT - 1; i++)
     {
-        u16 rnd = ContestRandom() % opponentsCount;
+        u16 rnd = ContestCompatRandom() % opponentsCount;
         s32 j;
 
         gContestMons[i] = gContestOpponents[opponents[rnd]];
@@ -3579,7 +3579,7 @@ static void DetermineFinalStandings(void)
     for (i = 0; i < CONTESTANT_COUNT; i++)
     {
         s32 j;
-        randomOrdering[i] = ContestRandom();
+        randomOrdering[i] = ContestCompatRandom();
         for (j = 0; j < i; j++)
         {
             if (randomOrdering[i] == randomOrdering[j])
@@ -4307,7 +4307,7 @@ void SortContestants(bool8 useRanking)
     for (i = 0; i < CONTESTANT_COUNT; i++)
     {
         s32 j;
-        randomOrdering[i] = ContestRandom();
+        randomOrdering[i] = ContestCompatRandom();
 
         // Loop through all the numbers generated so far.
         for (j = 0; j < i; j++)
@@ -4527,7 +4527,7 @@ static void CalculateAppealMoveImpact(u8 contestant)
 
     // Transform and Role Play require a visible target mon
     // so randomly choose a contestant to be the "target"
-    rnd = ContestRandom() % (CONTESTANT_COUNT - 1);
+    rnd = ContestCompatRandom() % (CONTESTANT_COUNT - 1);
     for (i = 0; i < CONTESTANT_COUNT; i++)
     {
         // Target can't be the attacker
@@ -5523,7 +5523,7 @@ void ResetContestLinkResults(void)
 bool8 SaveContestWinner(u8 rank)
 {
     s32 i;
-    u8 captionId = ContestRandom() % NUM_PAINTING_CAPTIONS;
+    u8 captionId = ContestCompatRandom() % NUM_PAINTING_CAPTIONS;
 
     // Get the index of the winner among the contestants
     for (i = 0; i < CONTESTANT_COUNT - 1; i++)
@@ -5806,7 +5806,7 @@ static void CalculateContestLiveUpdateData(void)
         }
     }
 
-    gContestResources->tv[winner].move = moveCandidates[ContestRandom() % numMoveCandidates];
+    gContestResources->tv[winner].move = moveCandidates[ContestCompatRandom() % numMoveCandidates];
 }
 
 static void SetConestLiveUpdateTVData(void)
@@ -5857,7 +5857,7 @@ static void SetConestLiveUpdateTVData(void)
     }
 
     // Randomly choose one of these actions to comment on
-    randAction = ContestRandom() % count;
+    randAction = ContestCompatRandom() % count;
     flags = gContestResources->tv[winner].winnerFlags;
     count = 0;
     flagId = 0;
@@ -5905,7 +5905,7 @@ static void SetConestLiveUpdateTVData(void)
             }
         }
     }
-    loser = loserCandidates[ContestRandom() % numLoserCandidates];
+    loser = loserCandidates[ContestCompatRandom() % numLoserCandidates];
 
     // Choose the "worst" action to comment on (flag with highest value)
     flagId = CONTESTLIVE_FLAG_NO_APPEALS;

@@ -31,6 +31,23 @@ extern volatile enum RngStatus gRngStatus;
 #define RANDOM_NONCONST extern inline
 #endif
 
+union CompactRandomState {
+    u16 state;
+    s16 state_signed;
+};
+
+// A 16-bit state version of Wyrand.
+RANDOM_NONCONST u16 CompactRandom(union CompactRandomState *s)
+{
+    u32 hash;
+    u16 temp;
+    temp = s->state;
+    temp += 0xFC15;
+    hash = (u32)temp * 0x2AB;
+    s->state = temp;
+    return (u16)((hash >> 16) ^ hash);
+}
+
 RANDOM_NONCONST void _LockRandom()
 {
     gRngStatus = BUSY;

@@ -5,8 +5,9 @@ This provides additional documentation for those wishing to make more involved c
 * `void BurnRandom(void)`: Updates `gRngState` during VBlank. This is *necessary* to use in VBlank callbacks as it is possible for corruption to occur otherwise.
     * There is no `BurnRandom2()` because none of the vanilla VBlank callbacks update the second RNG state.
 * `void BootSeedRng(void)`: Performs the initial RNG seed. You should not need to call this function yourself.
-* `u16 ContestRandom(void)`: Replaces `Random()` calls that were made in contest code, handling link compatibility. All contest code must use this call where it originally used `Random()` to remain link-compatible with vanilla games.
-    * Do not confuse this function with `GetContestRand()`. I apologize for the name and may change it in the future.
+* `u16 ContestCompatRandom(void)`: Replaces `Random()` calls that were made in contest code, handling link compatibility. All contest code must use this call where it originally used `Random()` to remain link-compatible with vanilla games.
+* `u16 CompactRandom(union CompactRandomState *)`: An alternate random number generator designed to use a 16-bit state.
+    * This should be used only where the RNG state needs to fit into 16 bits or is used for procedural generation.
 * `u16 CountLeadingZeroes(u32 x)`: Returns the number of leading zeroes in `x`, that is, the number of 0 bits before the first 1 bit. This is used by one of the `RandomRangeGood()` implementations.
 * `u32 GetSeedSecondaryData(void)`: Returns 32 bits data suitable for seeding a random number generator.
     * If the RTC is working, this is the current number of seconds on the RTC, otherwise it is the count of frames since boot.

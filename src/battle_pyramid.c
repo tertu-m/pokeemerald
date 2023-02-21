@@ -976,7 +976,7 @@ static void SetPickupItem(void)
     int i;
     int itemIndex;
     int rand;
-    u32 rand_state;
+    union CompactRandomState rand_state;
     u8 id;
     u32 lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
     u32 floor = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
@@ -987,13 +987,11 @@ static void SetPickupItem(void)
 
     id = GetPyramidFloorTemplateId();
     itemIndex = (gSpecialVar_LastTalked - sPyramidFloorTemplates[id].numTrainers) - 1;
-    rand = gSaveBlock2Ptr->frontier.pyramidRandoms[itemIndex / 2];
-    rand_state = rand;
+    rand_state.state = gSaveBlock2Ptr->frontier.pyramidRandoms[itemIndex / 2];
 
     for (i = 0; i < itemIndex + 1; i++)
     {
-        rand_state = ISO_RANDOMIZE1(rand_state);
-        rand = (rand_state >> 16) % 100;
+        rand = CompactRandom(&rand_state) % 100;
     }
 
     for (i = sPickupItemOffsets[floor]; i < ARRAY_COUNT(sPickupItemSlots); i++)

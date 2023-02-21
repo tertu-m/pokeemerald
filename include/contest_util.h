@@ -12,6 +12,6 @@ void ContestLinkTransfer(u8);
 void ShowContestPainting(void);
 u16 GetContestRand(void);
 u8 CountPlayerMuseumPaintings(void);
-u16 ContestRandom(void);
+u16 ContestCompatRandom(void);
 
 #endif // GUARD_CONTEST_UTIL_H
