@@ -1,5 +1,4 @@
 #include <ctype.h>
-#include <elf.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <stdbool.h>
@@ -8,6 +7,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include "elf.h"
 
 static bool try_patch_value(const char *sym, char *dest, const char *source, size_t size);
 
