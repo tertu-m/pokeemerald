@@ -1624,11 +1624,11 @@ static void Task_CreateConfetti(u8 taskId)
         gTasks[taskId].data[0] = 0;
         if (sContestResults->data->confettiCount < 40)
         {
-            u8 spriteId = CreateSprite(&sSpriteTemplate_Confetti, (ContestRandom() % DISPLAY_WIDTH) - 20, 44, 5);
-            gSprites[spriteId].data[0] = ContestRandom() % 512;
-            gSprites[spriteId].data[1] = (ContestRandom() % 24) + 16;
-            gSprites[spriteId].data[2] = (ContestRandom() % 256) + 48;
-            gSprites[spriteId].oam.tileNum += ContestRandom() % 17;
+            u8 spriteId = CreateSprite(&sSpriteTemplate_Confetti, (ContestCompatRandom() % DISPLAY_WIDTH) - 20, 44, 5);
+            gSprites[spriteId].data[0] = ContestCompatRandom() % 512;
+            gSprites[spriteId].data[1] = (ContestCompatRandom() % 24) + 16;
+            gSprites[spriteId].data[2] = (ContestCompatRandom() % 256) + 48;
+            gSprites[spriteId].oam.tileNum += ContestCompatRandom() % 17;
             sContestResults->data->confettiCount++;
         }
     }
@@ -2777,7 +2777,7 @@ bool8 IsWirelessContest(void)
 
 EWRAM_DATA u32 gLinkContestCompatRngValue;
 
-u16 ContestRandom(void)
+u16 ContestCompatRandom(void)
 {
     if (!(gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK))
         return Random();
