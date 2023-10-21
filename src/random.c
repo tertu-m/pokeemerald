@@ -48,15 +48,15 @@ u32 Random2_32(void)
    return SFC32_Next(&gRng2State);
 }
 
-void SeedRng(u16 seed)
+void SeedRng(u32 seed)
 {
-    Seed_Internal(&gRngState, (u32)seed);
+    Seed_Internal(&gRngState, seed);
     sRngStatus = UNLOCKED;
 }
 
-void SeedRng2(u16 seed)
+void SeedRng2(u32 seed)
 {
-    Seed_Internal(&gRng2State, (u32)seed);
+    Seed_Internal(&gRng2State, seed);
 }
 
 void AdvanceRandom(void)
