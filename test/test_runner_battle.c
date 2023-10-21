@@ -31,6 +31,41 @@
 
 #define RNG_SEED_DEFAULT 0x00000000
 
+static inline struct RngState GetDefaultRngState(void)
+{
+    struct RngState out;
+    out.a = 0;
+    out.b = 0;
+    out.c = 0;
+    out.ctr = 1;
+}
+
+static struct RngState GenerateRngStateFromSeed(const u32 seed)
+{
+    struct RngState out;
+    u32 i;
+
+    out.a = 0xBA5EBA11u;
+    out.b = 1349209454u; // 'PkMn'
+    out.c = seed;
+    out.ctr = 1;
+
+    for (i = 0; i < 20; i++)
+    {
+        SFC32_Next(&out);
+    }
+
+    return out;
+}
+
+static bool32 IsRngStateDefault(const struct RngState *state)
+{
+    return state->a == 0
+    && state->b == 0
+    && state->c == 0
+    && state->ctr == 1;
+}
+
 #undef Q_4_12
 #define Q_4_12(n) (s32)((n) * 4096)
 
@@ -230,7 +265,7 @@ static void BattleTest_Run(void *data)
 
     memset(&DATA, 0, sizeof(DATA));
 
-    DATA.recordedBattle.rngSeed = RNG_SEED_DEFAULT;
+    DATA.recordedBattle.rngState = GetDefaultRngState();
     DATA.recordedBattle.opponentA = TRAINER_LINK_OPPONENT;
 
     DATA.recordedBattle.textSpeed = OPTIONS_TEXT_SPEED_FAST;
@@ -942,7 +977,7 @@ static void CB2_BattleTest_NextTrial(void)
     {
         PrintTestName();
         gTestRunnerState.result = TEST_RESULT_PASS;
-        DATA.recordedBattle.rngSeed = ISO_RANDOMIZE1(STATE->runTrial);
+        DATA.recordedBattle.rngState = GenerateRngStateFromSeed(STATE->runTrial);
         DATA.queuedEvent = 0;
         DATA.lastActionTurn = 0;
         SetVariablesForRecordedBattle(&DATA.recordedBattle);
@@ -1014,17 +1049,17 @@ void Randomly(u32 sourceLine, u32 passes, u32 trials, struct RandomlyContext ctx
     }
     else
     {
-        INVALID_IF(DATA.recordedBattle.rngSeed != RNG_SEED_DEFAULT, "RNG seed already set");
+        INVALID_IF(!IsRngStateDefault(&DATA.recordedBattle.rngState), "RNG state already set up");
         STATE->trials = 50;
         STATE->trialRatio = Q_4_12(1) / STATE->trials;
-        DATA.recordedBattle.rngSeed = 0;
+        DATA.recordedBattle.rngState = GetDefaultRngState();
     }
 }
 
 void RNGSeed_(u32 sourceLine, u32 seed)
 {
-    INVALID_IF(DATA.recordedBattle.rngSeed != RNG_SEED_DEFAULT, "RNG seed already set");
-    DATA.recordedBattle.rngSeed = seed;
+    INVALID_IF(!IsRngStateDefault(&DATA.recordedBattle.rngState), "RNG seed already set");
+    DATA.recordedBattle.rngState = GenerateRngStateFromSeed(seed);
 }
 
 const struct TestRunner gBattleTestRunner =

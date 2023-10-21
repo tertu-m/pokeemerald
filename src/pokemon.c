@@ -3617,13 +3617,17 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
 
 void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 nature)
 {
-    u32 personality;
+    u32 personality, maximumValue, randomBase;
 
-    do
+    maximumValue = UINT32_MAX / NUM_NATURES;
+
+    if (nature < UINT32_MAX - maximumValue * NUM_NATURES)
     {
-        personality = Random32();
+        maximumValue += 1;
     }
-    while (nature != GetNatureFromPersonality(personality));
+
+    randomBase = ((u64)maximumValue*(u64)Random32()) >> 32;
+    personality = randomBase * NUM_NATURES + nature;
 
     CreateMon(mon, species, level, fixedIV, TRUE, personality, OT_ID_PLAYER_ID, 0);
 }

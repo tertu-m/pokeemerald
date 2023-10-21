@@ -4,35 +4,67 @@
 #include <alloca.h>
 #endif
 
-EWRAM_DATA static u8 sUnknown = 0;
-EWRAM_DATA static u32 sRandCount = 0;
-
 // IWRAM common
-u32 gRngValue;
-u32 gRng2Value;
+struct RngState gRngState;
+struct RngState gRng2State;
 
-u16 Random(void)
+enum RandomStatus {
+    UNINITIALIZED,
+    UNLOCKED,
+    LOCKED
+};
+
+static volatile EWRAM_DATA enum RandomStatus sRngStatus = UNINITIALIZED;
+
+#define SEED_ITERATIONS 20
+static inline void Seed_Internal(struct RngState *state, u32 seed)
 {
-    gRngValue = ISO_RANDOMIZE1(gRngValue);
-    sRandCount++;
-    return gRngValue >> 16;
+    u32 i;
+
+    state->a = 0xBA5EBA11u;
+    state->b = 1349209454u; // 'PkMn'
+    state->c = seed;
+    state->ctr = 1;
+
+    for(i = 0; i < SEED_ITERATIONS; i++)
+    {
+        SFC32_Next(state);
+    }
+}
+
+u32 Random32(void)
+{
+    u32 result;
+
+    sRngStatus = LOCKED;
+    result = SFC32_Next(&gRngState);
+    sRngStatus = UNLOCKED;
+
+    return result;
+}
+
+u32 Random2_32(void)
+{
+   return SFC32_Next(&gRng2State);
 }
 
 void SeedRng(u16 seed)
 {
-    gRngValue = seed;
-    sUnknown = 0;
+    Seed_Internal(&gRngState, (u32)seed);
+    sRngStatus = UNLOCKED;
 }
 
 void SeedRng2(u16 seed)
 {
-    gRng2Value = seed;
+    Seed_Internal(&gRng2State, (u32)seed);
 }
 
-u16 Random2(void)
+void AdvanceRandom(void)
 {
-    gRng2Value = ISO_RANDOMIZE1(gRng2Value);
-    return gRng2Value >> 16;
+    if (sRngStatus == UNLOCKED)
+    {
+        SFC32_Next(&gRngState);
+    }
 }
 
 #define SHUFFLE_IMPL \

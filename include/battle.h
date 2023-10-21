@@ -14,6 +14,7 @@
 #include "battle_bg.h"
 #include "pokeball.h"
 #include "battle_debug.h"
+#include "random.h"
 
 // Used to exclude moves learned temporarily by Transform or Mimic
 #define MOVE_IS_PERMANENT(battler, moveSlot)                        \
@@ -485,6 +486,12 @@ struct LinkBattlerHeader
     struct BattleEnigmaBerry battleEnigmaBerry;
 };
 
+struct BattleVideo
+{
+    u32 battleTypeFlags;
+    struct RngState recordedBattleRngState;
+};
+
 struct MegaEvolutionData
 {
     u8 toEvolve; // As flags using gBitTable.
@@ -608,7 +615,7 @@ struct BattleStruct
     u16 lastTakenMoveFrom[MAX_BATTLERS_COUNT][MAX_BATTLERS_COUNT]; // a 2-D array [target][attacker]
     union {
         struct LinkBattlerHeader linkBattlerHeader;
-        u32 battleVideo[2];
+        struct BattleVideo battleVideo;
     } multiBuffer;
     u8 wishPerishSongState;
     u8 wishPerishSongBattlerId;

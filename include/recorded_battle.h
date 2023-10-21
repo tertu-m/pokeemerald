@@ -13,7 +13,7 @@ struct RecordedBattleSave
     u8 playersGender[MAX_BATTLERS_COUNT];
     u32 playersTrainerId[MAX_BATTLERS_COUNT];
     u8 playersLanguage[MAX_BATTLERS_COUNT];
-    u32 rngSeed;
+    struct RngState rngState;
     u32 battleFlags;
     u8 playersBattlers[MAX_BATTLERS_COUNT];
     u16 opponentA;
@@ -49,8 +49,8 @@ enum
     RECORDED_ITEM_MOVE,
 };
 
-extern u32 gRecordedBattleRngSeed;
-extern u32 gBattlePalaceMoveSelectionRngValue;
+extern struct RngState gRecordedBattleRngState;
+extern struct RngState gBattlePalaceMoveSelectionRngState;
 extern u8 gRecordedBattleMultiplayerId;
 
 #define B_RECORD_MODE_RECORDING 1

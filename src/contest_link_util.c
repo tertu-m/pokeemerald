@@ -203,7 +203,7 @@ static void Task_LinkContest_CommunicateRngEm(u8 taskId)
             if (!IsLinkTaskFinished())
                 return;
 
-            if (LinkContest_SendBlock(&gRngValue, sizeof(gRngValue)) == 1)
+            if (LinkContest_SendBlock(&gRngState, sizeof(gRngState)) == 1)
                 gTasks[taskId].data[0]++;
         }
         else
@@ -216,8 +216,8 @@ static void Task_LinkContest_CommunicateRngEm(u8 taskId)
         // Wait to receive RNG data
         if (LinkContest_GetBlockReceived(0))
         {
-            memcpy(&gRngValue, gBlockRecvBuffer[0], sizeof(gRngValue));
-            memcpy(&gContestRngValue, gBlockRecvBuffer[0], sizeof(gContestRngValue));
+            memcpy(&gRngState, gBlockRecvBuffer[0], sizeof(gRngState));
+            memcpy(&gContestRngState, gBlockRecvBuffer[0], sizeof(gContestRngState));
             gTasks[taskId].data[0]++;
         }
         break;

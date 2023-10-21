@@ -1,15 +1,45 @@
 #ifndef GUARD_RANDOM_H
 #define GUARD_RANDOM_H
 
-extern u32 gRngValue;
-extern u32 gRng2Value;
+struct RngState
+{
+    u32 a;
+    u32 b;
+    u32 c;
+    u32 ctr;
+};
 
-//Returns a 16-bit pseudorandom number
-u16 Random(void);
-u16 Random2(void);
+static inline u32 SFC32_Next(struct RngState *state)
+{
+    u32 b, c, result;
+
+    b = state->b;
+    result = state->a + b + state->ctr++;
+    state->a = b ^ (b >> 9);
+    c = state->c;
+    state->b = c + (c << 3);
+    state->c = ((c << 21) | (c >> 11)) + result;
+
+    return result;
+}
+
+extern struct RngState gRngState;
+extern struct RngState gRng2State;
 
 //Returns a 32-bit pseudorandom number
-#define Random32() (Random() | (Random() << 16))
+u32 Random32(void);
+u32 Random2_32(void);
+
+//Returns a 16-bit pseudorandom number
+static inline u16 Random(void)
+{
+    return (u16)(Random32() >> 16);
+}
+
+static inline u16 Random2(void)
+{
+    return (u16)(Random2_32() >> 16);
+}
 
 // The number 1103515245 comes from the example implementation of rand and srand
 // in the ISO C standard.
@@ -19,6 +49,9 @@ u16 Random2(void);
 //Sets the initial seed value of the pseudorandom number generator
 void SeedRng(u16 seed);
 void SeedRng2(u16 seed);
+
+// Advances the RNG state if it is safe to do so
+void AdvanceRandom(void);
 
 void Shuffle8(void *data, size_t n);
 void Shuffle16(void *data, size_t n);

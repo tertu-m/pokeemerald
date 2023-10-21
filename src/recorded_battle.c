@@ -33,8 +33,8 @@ struct PlayerInfo
 // Save data using TryWriteSpecialSaveSector is allowed to exceed SECTOR_DATA_SIZE (up to the counter field)
 STATIC_ASSERT(sizeof(struct RecordedBattleSave) <= SECTOR_COUNTER_OFFSET, RecordedBattleSaveFreeSpace);
 
-EWRAM_DATA u32 gRecordedBattleRngSeed = 0;
-EWRAM_DATA u32 gBattlePalaceMoveSelectionRngValue = 0;
+EWRAM_DATA struct RngState gRecordedBattleRngState = {0};
+EWRAM_DATA struct RngState gBattlePalaceMoveSelectionRngState = {0};
 EWRAM_DATA static u8 sBattleRecords[MAX_BATTLERS_COUNT][BATTLER_RECORD_SIZE] = {0};
 EWRAM_DATA static u16 sBattlerRecordSizes[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA static u16 sBattlerPrevRecordSizes[MAX_BATTLERS_COUNT] = {0};
@@ -98,13 +98,13 @@ void RecordedBattle_SetTrainerInfo(void)
 
     if (sRecordMode == B_RECORD_MODE_RECORDING)
     {
-        gRecordedBattleRngSeed = gRngValue;
+        gRecordedBattleRngState = gRngState;
         sFrontierFacility = VarGet(VAR_FRONTIER_FACILITY);
         sFrontierBrainSymbol = GetFronterBrainSymbol();
     }
     else if (sRecordMode == B_RECORD_MODE_PLAYBACK)
     {
-        gRngValue = gRecordedBattleRngSeed;
+        gRngState = gRecordedBattleRngState;
     }
 
     if (gBattleTypeFlags & BATTLE_TYPE_LINK)
@@ -315,7 +315,7 @@ bool32 MoveRecordedBattleToSaveData(void)
         battleSave->playersTrainerId[i] = sPlayers[i].trainerId;
     }
 
-    battleSave->rngSeed = gRecordedBattleRngSeed;
+    battleSave->rngState = gRecordedBattleRngState;
 
     if (sBattleFlags & BATTLE_TYPE_LINK)
     {
@@ -524,7 +524,7 @@ void SetVariablesForRecordedBattle(struct RecordedBattleSave *src)
             ConvertInternationalString(gLinkPlayers[i].name, gLinkPlayers[i].language);
     }
 
-    gRecordedBattleRngSeed = src->rngSeed;
+    gRecordedBattleRngState = src->rngState;
     gBattleTypeFlags = src->battleFlags | BATTLE_TYPE_RECORDED;
     gTrainerBattleOpponent_A = src->opponentA;
     gTrainerBattleOpponent_B = src->opponentB;

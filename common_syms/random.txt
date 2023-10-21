@@ -1,2 +1,2 @@
-gRngValue
-gRng2Value
+gRngState
+gRng2State

@@ -327,7 +327,7 @@ extern struct ContestResources *gContestResources;
 extern struct ContestWinner gCurContestWinner;
 extern u8 gCurContestWinnerIsForArtist;
 extern u8 gCurContestWinnerSaveIdx;
-extern u32 gContestRngValue;
+extern struct RngState gContestRngState;
 
 // contest.c
 void ResetLinkContestBoolean(void);
