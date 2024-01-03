@@ -1,12 +1,6 @@
 #ifndef GUARD_RANDOM_H
 #define GUARD_RANDOM_H
 
-//tx_randomizer_and_challenges
-u16 RandomSeeded(u16 value, u8 seeded);
-u16 RandomSeededModulo(u32 value, u16 modulo);
-void ShuffleListU8(u8 *list, u8 count, u8 seed);
-void ShuffleListU16(u16 *list, u16 count, u32 seed);
-
 // The number 1103515245 comes from the example implementation of rand and srand
 // in the ISO C standard.
 #define ISO_RANDOMIZE1(val)(1103515245 * (val) + 24691)
@@ -96,6 +90,16 @@ static inline void AdvanceRandom(void)
 }
 
 #endif
+
+//tx_randomizer_and_challenges
+struct RandomSeededState {
+    rng_value_t localSeed;
+    bool8 useLocalSeed;
+};
+
+u16 RandomSeededModulo(u32 value, u16 modulo);
+void ShuffleListSeeded8(u8 *list, u32 count, u32 seed);
+void ShuffleListSeeded16(u16 *list, u32 count, u32 seed);
 
 extern rng_value_t gRngValue;
 extern rng_value_t gRng2Value;
@@ -228,11 +232,5 @@ u32 RandomUniformDefault(enum RandomTag, u32 lo, u32 hi);
 u32 RandomUniformExceptDefault(enum RandomTag, u32 lo, u32 hi, bool32 (*reject)(u32));
 u32 RandomWeightedArrayDefault(enum RandomTag, u32 sum, u32 n, const u8 *weights);
 const void *RandomElementArrayDefault(enum RandomTag, const void *array, size_t size, size_t count);
-
-//tx_randomizer_and_challenges
-u16 RandomSeeded(u16 value, u8 seeded);
-u16 RandomSeededModulo(u32 value, u16 modulo);
-void ShuffleListU8(u8 *list, u8 count, u8 seed);
-void ShuffleListU16(u16 *list, u16 count, u32 seed);
 
 #endif // GUARD_RANDOM_H

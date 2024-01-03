@@ -1486,13 +1486,13 @@ void CalculateMonStats(struct Pokemon *mon)
         {
         case 0:
             break;
-        case 1: 
+        case 1:
             n = 2 * 100 + hpIV;
             break;
-        case 2: 
+        case 2:
             n = 2 * 255 + hpIV;
             break;
-        case 3: 
+        case 3:
             n = 2 * 500 + hpIV;
             break;
         default:
@@ -3043,8 +3043,8 @@ u8 GiveMonToPlayer(struct Pokemon *mon)
     if (i >= GetMaxPartySize()) //tx_randomizer_and_challenges
         return CopyMonToPC(mon);
 
-    if (typeChallenge != TX_CHALLENGE_TYPE_OFF && 
-                    GetTypeBySpecies(GetMonData(mon, MON_DATA_SPECIES, NULL), 1) != typeChallenge && 
+    if (typeChallenge != TX_CHALLENGE_TYPE_OFF &&
+                    GetTypeBySpecies(GetMonData(mon, MON_DATA_SPECIES, NULL), 1) != typeChallenge &&
                     GetTypeBySpecies(GetMonData(mon, MON_DATA_SPECIES, NULL), 2) != typeChallenge)
         return CopyMonToPC(mon);
 
@@ -6527,14 +6527,14 @@ void RandomizeTypeEffectivenessListEWRAM(u16 seed)
     u8 stemp[RANDOM_TYPE_COUNT];
 
     memcpy(stemp, sOneTypeChallengeValidTypes, sizeof(sOneTypeChallengeValidTypes));
-    ShuffleListU8(stemp, NELEMS(sOneTypeChallengeValidTypes), seed);
+    ShuffleListSeeded8(stemp, NELEMS(sOneTypeChallengeValidTypes), seed);
 
     sTypeEffectivenessList[TYPE_MYSTERY] = TYPE_MYSTERY;
     for (i=0; i<NUMBER_OF_MON_TYPES; i++)
     {
         if (i != TYPE_MYSTERY)
             sTypeEffectivenessList[i] = stemp[i];
-        
+
         #ifndef NDEBUG
             MgbaPrintf(MGBA_LOG_DEBUG, "sTypeEffectivenessList[%d]: %S => %S", i, gTypeNames[i], gTypeNames[sTypeEffectivenessList[i]] );
         #endif
@@ -6549,7 +6549,7 @@ u8 GetTypeEffectivenessRandom(u8 type)
 {
     if (type == TYPE_NONE)
         return TYPE_NONE;
-    
+
     if (!gSaveBlock1Ptr->tx_Random_TypeEffectiveness)
         return type;
 
@@ -6569,11 +6569,11 @@ u16 PickRandomStarterForOneTypeChallenge(u16 *speciesList, u8 starterId)
     {
         u16 *stemp = Alloc(sizeof(sRandomSpeciesEvo0));
         DmaCopy16(3, sRandomSpeciesEvo0, stemp, sizeof(sRandomSpeciesEvo0));
-        ShuffleListU16(stemp, RANDOM_SPECIES_EVO_0_COUNT, (starterId+13)*12289);
+        ShuffleListSeeded16(stemp, RANDOM_SPECIES_EVO_0_COUNT, (starterId+13)*12289);
         for (i=0; i<RANDOM_SPECIES_EVO_0_COUNT; i++)
         {
             species = stemp[i];
-            if ((GetTypeBySpecies(species, 1) == typeChallenge || GetTypeBySpecies(species, 2) == typeChallenge) 
+            if ((GetTypeBySpecies(species, 1) == typeChallenge || GetTypeBySpecies(species, 2) == typeChallenge)
                 && species != speciesList[0] && species != speciesList[1] && species != speciesList[2])
                 break;
         }
@@ -6587,11 +6587,11 @@ u16 PickRandomStarterForOneTypeChallenge(u16 *speciesList, u8 starterId)
     {
         u16 *stemp = Alloc(sizeof(sRandomSpeciesLegendary));
         DmaCopy16(3, sRandomSpeciesLegendary, stemp, sizeof(sRandomSpeciesLegendary));
-        ShuffleListU16(stemp, RANDOM_SPECIES_COUNT_LEGENDARY, (starterId+13)*12289);
+        ShuffleListSeeded16(stemp, RANDOM_SPECIES_COUNT_LEGENDARY, (starterId+13)*12289);
         for (i=0; i<RANDOM_SPECIES_COUNT_LEGENDARY; i++)
         {
             species = stemp[i];
-            if ((GetTypeBySpecies(species, 1) == typeChallenge || GetTypeBySpecies(species, 2) == typeChallenge) 
+            if ((GetTypeBySpecies(species, 1) == typeChallenge || GetTypeBySpecies(species, 2) == typeChallenge)
                 && species != speciesList[0] && species != speciesList[1] && species != speciesList[2])
                 break;
         }
@@ -6605,11 +6605,11 @@ u16 PickRandomStarterForOneTypeChallenge(u16 *speciesList, u8 starterId)
     {
         u16 *stemp = Alloc(sizeof(sRandomSpecies));
         DmaCopy16(3, sRandomSpecies, stemp, sizeof(sRandomSpecies));
-        ShuffleListU16(stemp, RANDOM_SPECIES_COUNT, (starterId+13)*12289);
+        ShuffleListSeeded16(stemp, RANDOM_SPECIES_COUNT, (starterId+13)*12289);
         for (i=0; i<RANDOM_SPECIES_COUNT; i++)
         {
             species = stemp[i];
-            if ((GetTypeBySpecies(species, 1) == typeChallenge || GetTypeBySpecies(species, 2) == typeChallenge) 
+            if ((GetTypeBySpecies(species, 1) == typeChallenge || GetTypeBySpecies(species, 2) == typeChallenge)
                 && species != speciesList[0] && species != speciesList[1] && species != speciesList[2])
                 break;
         }
@@ -6640,7 +6640,7 @@ u16 PickRandomStarter(u16 *speciesList, u8 starterId)
     {
         u16 *stemp = Alloc(sizeof(sRandomSpeciesEvo0));
         DmaCopy16(3, sRandomSpeciesEvo0, stemp, sizeof(sRandomSpeciesEvo0));
-        ShuffleListU16(stemp, RANDOM_SPECIES_EVO_0_COUNT, 12289);
+        ShuffleListSeeded16(stemp, RANDOM_SPECIES_EVO_0_COUNT, 12289);
         species = stemp[starterId*27];
         Free(stemp);
         return species;
@@ -6649,7 +6649,7 @@ u16 PickRandomStarter(u16 *speciesList, u8 starterId)
     {
         u16 *stemp = Alloc(sizeof(sRandomStarterSpeciesEvo2));
         DmaCopy16(3, sRandomStarterSpeciesEvo2, stemp, sizeof(sRandomStarterSpeciesEvo2));
-        ShuffleListU16(stemp, RANDOM_STARTER_SPECIES_EVO_2_COUNT, 12289);
+        ShuffleListSeeded16(stemp, RANDOM_STARTER_SPECIES_EVO_2_COUNT, 12289);
         species = stemp[starterId*27];
         Free(stemp);
         return species;
@@ -6658,7 +6658,7 @@ u16 PickRandomStarter(u16 *speciesList, u8 starterId)
     {
         u16 *stemp = Alloc(sizeof(sRandomSpeciesLegendary));
         DmaCopy16(3, sRandomSpeciesLegendary, stemp, sizeof(sRandomSpeciesLegendary));
-        ShuffleListU16(stemp, RANDOM_SPECIES_COUNT_LEGENDARY, 12289);
+        ShuffleListSeeded16(stemp, RANDOM_SPECIES_COUNT_LEGENDARY, 12289);
         species = stemp[starterId*27];
         Free(stemp);
         return species;
@@ -6667,11 +6667,11 @@ u16 PickRandomStarter(u16 *speciesList, u8 starterId)
     {
         u16 *stemp = Alloc(sizeof(sRandomSpecies));
         DmaCopy16(3, sRandomSpecies, stemp, sizeof(sRandomSpecies));
-        ShuffleListU16(stemp, RANDOM_SPECIES_COUNT, 12289);
+        ShuffleListSeeded16(stemp, RANDOM_SPECIES_COUNT, 12289);
         species = stemp[starterId*27];
         Free(stemp);
-        return species;  
-    } 
+        return species;
+    }
 }
 
 u8 GetTypeBySpecies(u16 species, u8 typeNum)
@@ -6797,7 +6797,7 @@ u16 GetRandomMove(u16 move, u16 species)
 {
     u16 val = RandomSeededModulo(move + species, RANDOM_MOVES_COUNT);
     u16 final = sRandomValidMoves[val];
-    
+
     #ifndef NDEBUG
         MgbaPrintf(MGBA_LOG_DEBUG, "TX RANDOM MOVE     : GetRandomMove: move=%d=%S, species=%d; combined=%d; val=%d; final=%d=%S", move,  gMoveNames[move], species, move + species, val, final, gMoveNames[final]);
     #endif
