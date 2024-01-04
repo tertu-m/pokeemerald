@@ -310,7 +310,7 @@ u16 RandomSeededModulo(u32 value, u16 modulo)
     if (lower < modulo)
     {
         u16 adjusted_mod;
-        adjusted_mod = -modulo % modulo;
+        adjusted_mod = (UINT16_MAX + 1) % modulo;
         while (lower < adjusted_mod)
         {
             scaled = (u32)LocalRandomSeededInternal(&state) * (u32)modulo;
@@ -330,7 +330,7 @@ void ShuffleListSeeded8(u8 *list, u32 count, u32 seed)
     for (i = (count - 1); i > 0; i--)
     {
         u8 tmp;
-        u16 j = LocalRandomSeededInternal(&state) % (i + 1);
+        u16 j = (LocalRandomSeededInternal(&state) * (i + 1)) >> 16;
         SWAP(list[i], list[j], tmp);
     }
 }
@@ -344,7 +344,7 @@ void ShuffleListSeeded16(u16 *list, u32 count, u32 seed)
     for (i = (count - 1); i > 0; i--)
     {
         u16 tmp;
-        u16 j = LocalRandomSeededInternal(&state) % (i + 1);
+        u16 j = (LocalRandomSeededInternal(&state) * (i + 1)) >> 16;
         SWAP(list[i], list[j], tmp);
     }
 }
