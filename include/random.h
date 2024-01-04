@@ -92,11 +92,7 @@ static inline void AdvanceRandom(void)
 #endif
 
 //tx_randomizer_and_challenges
-struct RandomSeededState {
-    rng_value_t localSeed;
-    bool8 useLocalSeed;
-};
-
+u16 RandomSeeded(u32 value, bool8 forbidChaos);
 u16 RandomSeededModulo(u32 value, u16 modulo);
 void ShuffleListSeeded8(u8 *list, u32 count, u32 seed);
 void ShuffleListSeeded16(u16 *list, u32 count, u32 seed);
