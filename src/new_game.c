@@ -45,6 +45,7 @@
 #include "mystery_gift.h"
 #include "union_room_chat.h"
 #include "constants/items.h"
+#include "randomizer.h"
 
 extern const u8 EventScript_ResetAllMapFlags[];
 
@@ -122,6 +123,17 @@ static void ClearFrontierRecord(void)
 
     gSaveBlock2Ptr->frontier.opponentNames[0][0] = EOS;
     gSaveBlock2Ptr->frontier.opponentNames[1][0] = EOS;
+}
+
+static void SetUpRandomizer(void)
+{
+    FlagSet(RZ_FLAG_FIELD_ITEMS);
+    FlagSet(RZ_FLAG_FIXED_MON);
+    FlagSet(RZ_FLAG_STARTERS);
+    FlagSet(RZ_FLAG_WILD_MON);
+    FlagSet(RZ_FLAG_TRAINER_MON);
+    VarSet(RZ_VAR_SPECIES_MODE, MON_RANDOM_LEGEND_AWARE);
+    EnableNationalPokedex();
 }
 
 static void WarpToTruck(void)
@@ -204,6 +216,7 @@ void NewGameInitData(void)
     WipeTrainerNameRecords();
     ResetTrainerHillResults();
     ResetContestLinkResults();
+    SetUpRandomizer();
 }
 
 static void ResetMiniGamesRecords(void)
