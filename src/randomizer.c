@@ -201,7 +201,9 @@ void FindHiddenItemRandomize_NativeCall(struct ScriptContext *ctx)
 
 static inline bool32 IsRandomizerLegendary(u16 species)
 {
-    return gSpeciesInfo[species].isLegendary || gSpeciesInfo[species].isMythical;
+    return gSpeciesInfo[species].isLegendary
+        || gSpeciesInfo[species].isMythical
+        || gSpeciesInfo[species].isUltraBeast;
 }
 
 EWRAM_DATA static u16 sRandomizerLegendaryCount = 0;
@@ -375,7 +377,6 @@ u16 RandomizeFixedEncounterMon(u16 species, u8 mapNum, u8 mapGroup, u8 localId)
 
     return species;
 }
-
 
 EWRAM_DATA static u32 sLastStarterRandomizerSeed = 0;
 EWRAM_DATA static u16 sRandomizedStarters[3] = {0};
