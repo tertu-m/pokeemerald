@@ -132,7 +132,7 @@ static void SetUpRandomizer(void)
     FlagSet(RZ_FLAG_STARTERS);
     FlagSet(RZ_FLAG_WILD_MON);
     FlagSet(RZ_FLAG_TRAINER_MON);
-    VarSet(RZ_VAR_SPECIES_MODE, MON_RANDOM_LEGEND_AWARE);
+    VarSet(RZ_VAR_SPECIES_MODE, MON_RANDOM_BST);
     EnableNationalPokedex();
 }
 
