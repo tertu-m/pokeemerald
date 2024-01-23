@@ -11,7 +11,11 @@
 #define RZ_TRAINER_ID_IS_SEED       TRUE
 
 // If TRUE, the only options for species randomization are completely random and "legend aware."
-#define RZ_SPECIES_BASIC_SUPPORT    TRUE
+#define RZ_SPECIES_BASIC_SUPPORT    FALSE
+
+#if RZ_SPECIES_BASIC_SUPPORT == FALSE
+#define RZ_SPECIES_TABLES_IN_RAM    TRUE
+#endif
 
 #define RZ_MAX_TM   ITEM_TM50
 

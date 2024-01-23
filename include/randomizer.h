@@ -46,11 +46,13 @@ enum RandomizerOption {
 enum RandomizerSpeciesMode {
     MON_RANDOM,
     MON_RANDOM_LEGEND_AWARE,
+    #if RZ_SPECIES_BASIC_SUPPORT == FALSE
+        MON_RANDOM_BST,
+        // Other modes here.
+        MAX_MON_MODE
+    #endif
 };
 
-#if RZ_SPECIES_BASIC_SUPPORT == FALSE
-#error "Randomization tables aren't yet implemented."
-#endif
 
 u32 GetRandomizerSeed(void);
 bool8 RandomizerFeatureEnabled(enum RandomizerFeature feature);
