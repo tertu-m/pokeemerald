@@ -274,7 +274,7 @@ static inline bool32 IsRandomizerLegendary(u16 species)
         || gSpeciesInfo[species].isUltraBeast;
 }
 
-#define RZ_SPECIES_COUNT (RANDOMIZER_MAX_MON-1)
+#define RZ_SPECIES_COUNT (RANDOMIZER_MAX_MON)
 
 struct SpeciesGroupEntry
 {
