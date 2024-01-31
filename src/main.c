@@ -121,9 +121,6 @@ void AgbMain()
 
     gLinkTransferringData = FALSE;
     sUnusedVar = 0xFC0;
-#if RZ_ENABLE == TRUE
-    RandomizerCountLegendarySpecies();
-#endif
 
 #ifndef NDEBUG
 #if (LOG_HANDLER == LOG_HANDLER_MGBA_PRINT)

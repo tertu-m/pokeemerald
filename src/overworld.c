@@ -1752,6 +1752,10 @@ void CB2_ContinueSavedGame(void)
     else
         LoadSaveblockObjEventScripts();
 
+    #if RZ_ENABLED == TRUE && RZ_SPECIES_TABLES_IN_RAM == TRUE
+        PreloadRandomizationTables();
+    #endif
+
     UnfreezeObjectEvents();
     DoTimeBasedEvents();
     UpdateMiscOverworldStates();
